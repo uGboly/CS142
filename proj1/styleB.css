@@ -1,0 +1,26 @@
+body {
+    white-space: nowrap;
+}
+div {
+    display: inline-block;
+    width: 100px;
+    height: 150px;
+    background-color: #eeeff2;
+    border-left: 10px dotted #D0D0FF;
+    margin-right: 10px;
+    padding-left: 10px;
+    font-family: Tahoma;
+    font-size: 40px;
+}
+
+div:hover{
+    cursor: pointer;
+    background-color: yellow;
+    color: goldenrod;
+}
+
+div:last-of-type {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+}
