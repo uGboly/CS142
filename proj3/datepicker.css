@@ -1,0 +1,21 @@
+h2 {
+    font-family: 'Courier New', Courier, monospace;
+}
+table {
+    text-align: center;
+    background-color: whitesmoke;
+}
+
+.dimmed {
+    color:grey
+}
+
+button {
+    width: 5em;
+    margin: 1em;
+    border: none;
+}
+
+button:first-of-type {
+    margin-left: 0.5em;
+}
