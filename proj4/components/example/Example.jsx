@@ -8,7 +8,6 @@ import './Example.css';
 import Prism from 'prismjs';
 import 'prismjs/components/prism-jsx.js';
 import '../../node_modules/prismjs/themes/prism.css';
-import Header from '../header/Header';
 
 /* eslint-disable  react/jsx-one-expression-per-line */
 /* eslint-disable  react/destructuring-assignment */
@@ -108,7 +107,6 @@ class Example extends React.Component {
   render() {
     return (
       <div className="container Example">
-        <Header/>
         <h1>CS142 Project#4 React.js Example</h1>
 
         <div className="motto-update">

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Switch from './components/switch/Switch';
 import Header from './components/header/Header';
+import ToolBarRouter from './components/toolBarRouter/ToolBarRouter';
 
 ReactDOM.render(
-  <div> <Header/><Switch /></div>,
+  <div> <Header/><ToolBarRouter /></div>,
   document.getElementById('reactapp'),
 );

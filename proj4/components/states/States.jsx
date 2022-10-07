@@ -1,6 +1,5 @@
 import React from 'react';
 import './States.css';
-import Header from '../header/Header';
 
 /**
  * Define States, a React componment of CS142 project #4 problem #2.  The model
@@ -29,7 +28,6 @@ class States extends React.Component {
     states = states.map(s => (<li key={s}>{s}</li>));
     return (
       <div>
-        <Header/>
         <input type="text" onChange={this.handleInputChange} value={this.state.substr} />
         <ul>
           {states}

@@ -1,0 +1,10 @@
+button {
+    align-self: center;
+    font-size: large;
+    transition: 0.5s;
+    margin-bottom: 10px;
+}
+
+button:hover{
+    box-shadow:  0.3em 0.5em 0.3em grey;
+}
