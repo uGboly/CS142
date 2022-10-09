@@ -16,11 +16,29 @@ var Promise = require("Promise");
 
 
 function fetchModel(url) {
+  let xhr = new XMLHttpRequest();
+  xhr.timeout = 10000;
+  xhr.open('GET', url);
+  xhr.send();
+
   return new Promise(function(resolve, reject) {
-      console.log(url);
-      setTimeout(() => reject({status: 501, statusText: "Not Implemented"}),0);
+      // console.log(url);
+      // setTimeout(() => reject({status: 501, statusText: "Not Implemented"}), 10);
       // On Success return:
       // resolve({data: getResponseObject});
+      xhr.onload = function() {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve({data:JSON.parse(xhr.response) });
+        } else {
+          // eslint-disable-next-line prefer-promise-reject-errors
+          reject({status: xhr.status, statusText: xhr.statusText});
+        }
+      };
+
+      xhr.onerror = function() {
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject({status: 501, statusText: "Network Error : request failed to be sent!"});
+      };
   });
 }
 

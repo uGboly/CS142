@@ -2,3 +2,8 @@
   height: 60;
   justify-content: 'center';
 }
+
+.right{
+  position: absolute;
+  right: 1em;
+}
