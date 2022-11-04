@@ -30,7 +30,7 @@ class UserPhotos extends React.Component {
     })
     .then(res => {
       this.setState({name : res.data.first_name + ' ' + res.data.last_name});
-      this.props.changeContext('photo',this.state.name);
+      this.props.changeContext({view:'photo', user:this.state.name});
     })
     .catch(err => console.log(err));
   }

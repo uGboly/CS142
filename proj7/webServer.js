@@ -55,7 +55,7 @@ mongoose.connect('mongodb://localhost/cs142project6', { useNewUrlParser: true, u
 app.use(express.static(__dirname));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(session({loginName: ''}));
+app.use(session({secret: 'secretKey', resave: false, saveUninitialized: false}));
 
 app.get('/', function (request, response) {
     response.send('Simple web server of files from ' + __dirname);
@@ -133,7 +133,7 @@ app.get('/test/:p1', function (request, response) {
  * URL /user/list - Return all the User object.
  */
 app.get('/user/list', function (request, response) {
-    if (request.session.loginName === '') {
+    if (!request.session.loginName) {
         response.status(401).send('The user is not logged in.');
         return;
     }
@@ -164,7 +164,7 @@ app.get('/user/list', function (request, response) {
  * URL /user/:id - Return the information for User (id)
  */
 app.get('/user/:id', function (request, response) {
-    if (request.session.loginName === '') {
+    if (!request.session.loginName) {
         response.status(401).send('The user is not logged in.');
         return;
     }
@@ -201,7 +201,7 @@ app.get('/user/:id', function (request, response) {
  * URL /photosOfUser/:id - Return the Photos for User (id)
  */
 app.get('/photosOfUser/:id', function (request, response) {
-    if (request.session.loginName === '') {
+    if (!request.session.loginName) {
         response.status(401).send('The user is not logged in.');
         return;
     }
@@ -259,6 +259,8 @@ app.get('/photosOfUser/:id', function (request, response) {
 
 app.post('/admin/login', upload.any(), (req, res) => {
     let {loginName} = req.body;
+    console.log(loginName + " ask to login.");
+
 
     User.find({login_name : loginName}, function(err, user){
         if (err || user.length === 0) {
@@ -278,10 +280,12 @@ app.post('/admin/login', upload.any(), (req, res) => {
 });
 
 app.post('/admin/logout', (req, res) => {
-    if (req.session.loginName === '') {
+    if (!req.session.loginName) {
         res.status(401).send('The user is not currently logged in.');
     } else {
+        console.log(req.session.loginName + "logout!");
         req.session.loginName = '';
+        res.status(200).send('The user logged out successfully!');
     }
 });
 

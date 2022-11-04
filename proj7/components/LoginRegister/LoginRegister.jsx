@@ -2,7 +2,9 @@ import React from 'react';
 import {
     Button,
     Box,
-    TextField
+    Input,
+    FormControl,
+    InputLabel
 } from '@material-ui/core';
 import axios from 'axios';
 
@@ -10,47 +12,48 @@ class LoginRegister extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loginName : undefined
+            loginName: ''
         };
         this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleClick = this.handleClick.bind(this);
     }
 
-    handleSubmit(e) {
-        e.preventDefault();
+    handleClick() {
+        const formData = new FormData();
+        formData.append('loginName', this.state.loginName);
 
-        axios.post('/admin/login')
-        .then(res => {
-            this.props.changeContext({
-                view : 'home',
-                user : null,
-                logedUser : res.data.first_name
+        axios.post('/admin/login', formData)
+            .then(res => {
+                this.props.changeContext({loggedUser: res.data.first_name});
+                this.props.history.push(`/users/${res.data._id}`);
+            })
+            .catch(err => {
+                console.log(err);
+                this.setState({
+                    loginName: ''
+                });
             });
-        })
-        .catch(err => {
-            console.log(err);
-            this.setState({
-                loginName : null
-            });
-        });
     }
 
     handleChange(e) {
         this.setState({
-            loginName : e.target.value
+            loginName: e.target.value
         });
     }
 
     render() {
         return (
-            <Box component="form" onSubmit={this.handleSubmit}>
-                <TextField lable="login name" variant="outlined" value={this.state.loginName}></TextField>
-                <Button variant="contained" >Login</Button>
+            <Box sx={{width:'100%'}}>
+                <FormControl variant="standard">
+                    <InputLabel htmlFor="login-name">Login Name</InputLabel>
+                    <Input id="login-name" value={this.state.loginName} onChange={this.handleChange} />
+                </FormControl>
+                <Button variant="contained" component="button" onClick={this.handleClick}>Login</Button>
             </Box>
         );
     }
 
-    
+
 }
 
 export default LoginRegister;

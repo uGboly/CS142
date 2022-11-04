@@ -27,8 +27,8 @@ class PhotoShare extends React.Component {
     };
   }
 
-  changeContext(view, user, loggedUser){
-    this.setState({view, user, loggedUser});
+  changeContext(context){
+    this.setState(context);
   }
 
   render() {
@@ -37,7 +37,7 @@ class PhotoShare extends React.Component {
       <div>
       <Grid container spacing={8}>
         <Grid item xs={12}>
-        <TopBar view={this.state.view} user={this.state.user} loggedUser={this.state.loggedUser}/>
+        <TopBar view={this.state.view} user={this.state.user} loggedUser={this.state.loggedUser} changeContext={this.changeContext}/>
         </Grid>
         <div className="cs142-main-topbar-buffer"/>
         <Grid item sm={3}>

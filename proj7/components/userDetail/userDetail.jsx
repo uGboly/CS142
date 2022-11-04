@@ -25,7 +25,7 @@ class UserDetail extends React.Component {
     axios.get(`/user/${this.props.match.params.userId}`)
     .then(res => {
       this.user = res.data;
-      this.props.changeContext('user', this.user.first_name + " " + this.user.last_name);
+      this.props.changeContext({view:'user', user:this.user.first_name + " " + this.user.last_name});
     })
     .catch(err => console.log(err));
   }
@@ -41,7 +41,7 @@ class UserDetail extends React.Component {
       axios.get(`/user/${this.props.match.params.userId}`)
       .then(res => {
         this.user = res.data;
-        this.props.changeContext('user',this.user.first_name + " " + this.user.last_name);
+        this.props.changeContext({view:'user', user:this.user.first_name + " " + this.user.last_name});
       })
       .catch(err => console.log(err));
     }
