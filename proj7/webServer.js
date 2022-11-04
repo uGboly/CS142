@@ -55,7 +55,7 @@ mongoose.connect('mongodb://localhost/cs142project6', { useNewUrlParser: true, u
 app.use(express.static(__dirname));
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-app.use(session({secret: 'secretKey', resave: false, saveUninitialized: false}));
+app.use(session({ secret: 'secretKey', resave: false, saveUninitialized: false }));
 
 app.get('/', function (request, response) {
     response.send('Simple web server of files from ' + __dirname);
@@ -102,9 +102,9 @@ app.get('/test/:p1', function (request, response) {
         // do the work.  We put the collections into array and use async.each to
         // do each .count() query.
         var collections = [
-            {name: 'user', collection: User},
-            {name: 'photo', collection: Photo},
-            {name: 'schemaInfo', collection: SchemaInfo}
+            { name: 'user', collection: User },
+            { name: 'photo', collection: Photo },
+            { name: 'schemaInfo', collection: SchemaInfo }
         ];
         async.each(collections, function (col, done_callback) {
             col.collection.countDocuments({}, function (err, count) {
@@ -133,13 +133,13 @@ app.get('/test/:p1', function (request, response) {
  * URL /user/list - Return all the User object.
  */
 app.get('/user/list', function (request, response) {
-    if (!request.session.loginName) {
+    if (!request.session.loginUser) {
         response.status(401).send('The user is not logged in.');
         return;
     }
 
     //response.status(200).send(cs142models.userListModel());
-    User.find({}, function(err, users) {
+    User.find({}, function (err, users) {
         if (err) {
             response.status(500).send(JSON.stringify(err));
             return;
@@ -150,12 +150,12 @@ app.get('/user/list', function (request, response) {
         }
         let userList = users.map(user => {
             return {
-                _id : user._id.valueOf(),
-                first_name : user.first_name,
-                last_name : user.last_name
+                _id: user._id.valueOf(),
+                first_name: user.first_name,
+                last_name: user.last_name
             };
         });
-        console.log('user list' , userList);
+        console.log('user list', userList);
         response.status(200).send(JSON.stringify(userList));
     });
 });
@@ -164,17 +164,17 @@ app.get('/user/list', function (request, response) {
  * URL /user/:id - Return the information for User (id)
  */
 app.get('/user/:id', function (request, response) {
-    if (!request.session.loginName) {
+    if (!request.session.loginUser) {
         response.status(401).send('The user is not logged in.');
         return;
     }
 
     var id = request.params.id;
-    User.findById(id, function(err, user) {
+    User.findById(id, function (err, user) {
         if (err) {
-            if (err.name ===  'CastError') {
+            if (err.name === 'CastError') {
                 response.status(400).send('something other than the id of a User is provided');
-            } else{
+            } else {
                 response.status(500).send(JSON.stringify(err));
             }
             return;
@@ -184,14 +184,14 @@ app.get('/user/:id', function (request, response) {
             return;
         }
         let userData = {
-            _id : user._id.valueOf(), 
-            first_name : user.first_name, 
-            last_name : user.last_name, 
-            location : user.location, 
-            description : user.description, 
-            occupation : user.occupation
+            _id: user._id.valueOf(),
+            first_name: user.first_name,
+            last_name: user.last_name,
+            location: user.location,
+            description: user.description,
+            occupation: user.occupation
         };
-        
+
         console.log('User with _id:' + id, userData);
         response.status(200).send(JSON.stringify(userData));
     });
@@ -201,25 +201,25 @@ app.get('/user/:id', function (request, response) {
  * URL /photosOfUser/:id - Return the Photos for User (id)
  */
 app.get('/photosOfUser/:id', function (request, response) {
-    if (!request.session.loginName) {
+    if (!request.session.loginUser) {
         response.status(401).send('The user is not logged in.');
         return;
     }
-    
+
     var id = request.params.id;
-    Photo.find({user_id : id}, function(err, photos){
+    Photo.find({ user_id: id }, function (err, photos) {
         if (err || photos.length === 0) {
             response.status(400).send('Photos for user with _id:' + id + ' not found.');
             return;
         }
 
-        async.map(photos, function(photo, done_callback) {
-            async.map(photo.comments, function(comment, done_callback1) {
-                User.findById(comment.user_id, function(e, user) {
+        async.map(photos, function (photo, done_callback) {
+            async.map(photo.comments, function (comment, done_callback1) {
+                User.findById(comment.user_id, function (e, user) {
                     if (e) {
-                        if (e.name ===  'CastError') {
+                        if (e.name === 'CastError') {
                             response.status(400).send('something other than the id of a User is provided');
-                        } else{
+                        } else {
                             response.status(500).send(JSON.stringify(e));
                         }
                         return;
@@ -229,46 +229,46 @@ app.get('/photosOfUser/:id', function (request, response) {
                         return;
                     }
                     done_callback1(null, {
-                        comment : comment.comment,
-                        date_time : comment.date_time,
-                        _id : comment._id,
-                        user : {_id : user._id, first_name : user.first_name, last_name : user.last_name}
+                        comment: comment.comment,
+                        date_time: comment.date_time,
+                        _id: comment._id,
+                        user: { _id: user._id, first_name: user.first_name, last_name: user.last_name }
                     });
-                 });             
-            })
-            .then(res => {
-                done_callback(null, {
-                    _id : photo._id,
-                    user_id : photo.user_id,
-                    file_name : photo.file_name,
-                    date_time : photo.date_time,
-                    comments : res
                 });
             })
+                .then(res => {
+                    done_callback(null, {
+                        _id: photo._id,
+                        user_id: photo.user_id,
+                        file_name: photo.file_name,
+                        date_time: photo.date_time,
+                        comments: res
+                    });
+                })
+                .catch((error) => response.status(400).send(JSON.stringfy(error)));
+        })
+            .then(res => {
+                console.log("photos", res);
+                response.status(200).send(JSON.stringify(JSON.parse(JSON.stringify(res))));
+            })
             .catch((error) => response.status(400).send(JSON.stringfy(error)));
-        })
-        .then(res => {
-            console.log("photos", res);
-            response.status(200).send(JSON.stringify(JSON.parse(JSON.stringify(res))));
-        })
-        .catch((error) => response.status(400).send(JSON.stringfy(error)));
 
     });
-    
+
 });
 
 app.post('/admin/login', upload.any(), (req, res) => {
-    let {loginName} = req.body;
+    let { loginName } = req.body;
     console.log(loginName + " ask to login.");
 
 
-    User.find({login_name : loginName}, function(err, user){
+    User.find({ login_name: loginName }, function (err, user) {
         if (err || user.length === 0) {
             res.status(400).send('login_name is not a valid account');
             return;
         }
 
-        req.session.loginName = loginName;
+        req.session.loginUser = user[0]._id;
 
         let resData = {
             _id: user[0]._id,
@@ -280,13 +280,38 @@ app.post('/admin/login', upload.any(), (req, res) => {
 });
 
 app.post('/admin/logout', (req, res) => {
-    if (!req.session.loginName) {
+    if (!req.session.loginUser) {
         res.status(401).send('The user is not currently logged in.');
     } else {
-        console.log(req.session.loginName + "logout!");
-        req.session.loginName = '';
+        console.log(req.session.loginUser + "logout!");
+        req.session.loginUser = '';
         res.status(200).send('The user logged out successfully!');
     }
+});
+
+app.post("/commentsOfPhoto/:photo_id", upload.any(), (req, res) => {
+    if (!req.session.loginUser) {
+        res.status(401).send('The user is not currently logged in.');
+        return;
+    }
+
+    Photo.findById(req.params.photo_id, (err , photo) => {
+        if(err) {
+            res.status(404).send('Found no photo with this id');
+            return;
+        }
+
+        Photo.findByIdAndUpdate(req.params.photo_id, {
+                comments : [...photo.comments, {
+                    comment: req.body.comment,
+                    user_id: req.session.loginUser
+                }]
+            },
+            e => res.status(500).send(JSON.stringify(e))
+        );
+
+    });
+
 });
 
 

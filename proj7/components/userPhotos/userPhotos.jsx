@@ -11,7 +11,7 @@ import {
 } from '@material-ui/core';
 import './userPhotos.css';
 import axios from 'axios';
-
+import NewPhotoComment from './newPhotoComment';
 /**
  * Define UserPhotos, a React componment of CS142 project #5
  */
@@ -20,7 +20,7 @@ class UserPhotos extends React.Component {
     super(props);
     this.state = {
       user : null,
-      name : null
+      name : null,
     };
 
     axios.get(`/photosOfUser/${this.props.match.params.userId}`)
@@ -31,6 +31,15 @@ class UserPhotos extends React.Component {
     .then(res => {
       this.setState({name : res.data.first_name + ' ' + res.data.last_name});
       this.props.changeContext({view:'photo', user:this.state.name});
+    })
+    .catch(err => console.log(err));
+  }
+
+  componentDidUpdate() {
+    axios.get(`/photosOfUser/${this.props.match.params.userId}`)
+    .then(res => {
+      this.setState({user : res.data});
+      return axios.get(`/user/${this.props.match.params.userId}`);
     })
     .catch(err => console.log(err));
   }
@@ -71,6 +80,7 @@ class UserPhotos extends React.Component {
               </ListItem>
             )) : null}
             </List>
+            <NewPhotoComment photoId={photo._id}/>
           </CardContent>
         </Card>
       </Grid>

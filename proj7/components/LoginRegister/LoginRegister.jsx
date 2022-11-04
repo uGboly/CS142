@@ -43,8 +43,8 @@ class LoginRegister extends React.Component {
 
     render() {
         return (
-            <Box sx={{width:'100%'}}>
-                <FormControl variant="standard">
+            <Box sx={{width:'100%', height:'100%', display:'flex', justifyContent:'center', alignItems:'center'}}>
+                <FormControl variant="standard" sx={{width:'30%', height:'30%', display:'flex', justifyContent:'space-around'}}>
                     <InputLabel htmlFor="login-name">Login Name</InputLabel>
                     <Input id="login-name" value={this.state.loginName} onChange={this.handleChange} />
                 </FormControl>
