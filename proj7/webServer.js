@@ -31,11 +31,13 @@
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });// for parsing multipart/form-data
+const processFormBody = multer({storage: multer.memoryStorage()}).single('uploadedphoto');
 var mongoose = require('mongoose');
 mongoose.Promise = require('bluebird');
 
 var async = require('async');
-const upload = multer({ dest: 'uploads/' });// for parsing multipart/form-data
+const fs = require("fs");
 var express = require('express');
 var app = express();
 
@@ -258,11 +260,11 @@ app.get('/photosOfUser/:id', function (request, response) {
 });
 
 app.post('/admin/login', upload.any(), (req, res) => {
-    let { loginName } = req.body;
+    let { loginName, password} = req.body;
     console.log(loginName + " ask to login.");
 
 
-    User.find({ login_name: loginName }, function (err, user) {
+    User.find({ login_name : loginName, password : password }, function (err, user) {
         if (err || user.length === 0) {
             res.status(400).send('login_name is not a valid account');
             return;
@@ -279,7 +281,18 @@ app.post('/admin/login', upload.any(), (req, res) => {
     });
 });
 
-app.post('/admin/logout', (req, res) => {
+app.post('/user', upload.any(), (req, res) => {
+    let { loginName, password, first_name, last_name, occupation, location, description} = req.body;
+    console.log(loginName + " ask to register.");
+
+
+    User.create({login_name: loginName, password, first_name, last_name, occupation, location, description}, (err) => {
+        res.status(500).send(JSON.stringify(err));
+    });
+
+});
+
+app.post('/admin/logout', upload.any(), (req, res) => {
     if (!req.session.loginUser) {
         res.status(401).send('The user is not currently logged in.');
     } else {
@@ -314,6 +327,31 @@ app.post("/commentsOfPhoto/:photo_id", upload.any(), (req, res) => {
 
 });
 
+app.post('/photos/new', processFormBody, (req, res) => {
+    if (!req.session.loginUser) {
+        res.status(401).send('The user is not currently logged in.');
+        return;
+    }
+
+    if (!req.file) {
+        // XXX -  Insert error handling code here.
+        res.status(500).send('recive no file');
+        return;
+    }
+
+    const timestamp = new Date().valueOf();
+    const filename = 'U' +  String(timestamp) + req.file.originalname;
+
+    fs.writeFile("./images/" + filename, req.file.buffer, function (err) {
+      // XXX - Once you have the file written into your images directory under the name
+      // filename you can create the Photo object in the database
+      console.log(err);
+    });
+
+    Photo.create({file_name : filename, user_id : req.session.loginUser}, (err) => {
+        res.status(500).send(JSON.stringify(err));
+    });
+});
 
 var server = app.listen(3000, function () {
     var port = server.address().port;

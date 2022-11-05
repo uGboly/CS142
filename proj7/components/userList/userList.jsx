@@ -29,8 +29,8 @@ class UserList extends React.Component {
     .catch(err => console.log(err));
   }
 
-  componentDidUpdate() {
-    if (!this.state.users) {
+  componentDidUpdate(prevProps) {
+    if (!this.state.users || prevProps !== this.props) {
       axios.get('/user/list')
       .then(res => {
         this.setState({

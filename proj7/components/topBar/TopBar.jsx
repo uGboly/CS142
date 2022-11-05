@@ -1,9 +1,10 @@
 import React from 'react';
 import {
-  AppBar, Toolbar, Typography, Button
+  AppBar, Toolbar, Typography, Button, ButtonGroup
 } from '@material-ui/core';
 import './TopBar.css';
 import axios from 'axios';
+import NewPhoto from '../NewPhoto/newPhoto';
 /**
  * Define TopBar, a React componment of CS142 project #5
  */
@@ -41,11 +42,16 @@ class TopBar extends React.Component {
       </Typography>
     );
 
-    let logout = <Button variant="contained" component="button" color="secondary" onClick={this.handleClick}>logout</Button>;
+    let logout = (
+    <ButtonGroup variant="contained" aria-label="outlined secondary button group">
+      <Button component="button" onClick={this.handleClick}>logout</Button>;
+      <NewPhoto/>
+    </ButtonGroup>
+    );
 
     return (
       <AppBar className="cs142-topbar-appBar" position="absolute">
-        <Toolbar className="toptoolbar">
+        <Toolbar className="toptoolbar" spacing ={3}>
           <Typography variant="h5" color="inherit">
             Zhang Lin     version : {this.state.versionToDisplay ?? '' }
           </Typography>
