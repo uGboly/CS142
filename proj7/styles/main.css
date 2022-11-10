@@ -10,6 +10,7 @@ cs142-main- here.
 }
 
 .cs142-main-grid-item {
-  height: calc(100vh - 85px);
+  min-height: calc(100vh - 85px);
+  height: auto;
   padding: 10px;
 }

@@ -260,11 +260,11 @@ app.get('/photosOfUser/:id', function (request, response) {
 });
 
 app.post('/admin/login', upload.any(), (req, res) => {
-    let { loginName, password} = req.body;
-    console.log(loginName + " ask to login.");
+    let { login_name, password} = req.body;
+    console.log(login_name + " ask to login.");
 
 
-    User.find({ login_name : loginName, password : password }, function (err, user) {
+    User.find({ login_name, password : password }, function (err, user) {
         if (err || user.length === 0) {
             res.status(400).send('login_name is not a valid account');
             return;
@@ -281,13 +281,28 @@ app.post('/admin/login', upload.any(), (req, res) => {
     });
 });
 
-app.post('/user', upload.any(), (req, res) => {
-    let { loginName, password, first_name, last_name, occupation, location, description} = req.body;
-    console.log(loginName + " ask to register.");
+app.post('/user', upload.any(), async (req, res) => {
+    let { login_name, password, first_name, last_name, occupation, location, description} = req.body;
+    console.log(login_name + " ask to register.");
 
+    if (!login_name || !password || !first_name || !last_name) {
+        res.status(400).send('login_name & password & first_name & last_name should be provided');
+        return;
+    }
 
-    User.create({login_name: loginName, password, first_name, last_name, occupation, location, description}, (err) => {
-        res.status(500).send(JSON.stringify(err));
+    let duplicateUser = await User.findOne({login_name : login_name});
+    if (duplicateUser) {
+        res.status(400).send('Login name is used');
+        return;
+    }
+
+    User.create({login_name, password, first_name, last_name, occupation, location, description}, (err) => {
+        if (err) {
+            res.status(400).send(JSON.stringify(err));
+            return;
+        }
+        console.log('user created!');
+        res.status(200).send('registration finished');
     });
 
 });
@@ -320,11 +335,16 @@ app.post("/commentsOfPhoto/:photo_id", upload.any(), (req, res) => {
                     user_id: req.session.loginUser
                 }]
             },
-            e => res.status(500).send(JSON.stringify(e))
+            e => {
+                if (e) {
+                    res.status(500).send(JSON.stringify(e));
+                    return;
+                }
+                res.status(200).send('Successfully add comment');
+            }
         );
 
     });
-
 });
 
 app.post('/photos/new', processFormBody, (req, res) => {
@@ -349,7 +369,12 @@ app.post('/photos/new', processFormBody, (req, res) => {
     });
 
     Photo.create({file_name : filename, user_id : req.session.loginUser}, (err) => {
-        res.status(500).send(JSON.stringify(err));
+        if (err) {
+            res.status(500).send(JSON.stringify(err));
+            return;
+        }
+        console.log('Photo uploaded');
+        res.status(200).send('Successfully upload photo');
     });
 });
 
