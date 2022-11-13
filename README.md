@@ -2,7 +2,7 @@
 
 ## 课程官网
 
-CS142: Web Applications (Spring 2022)
+http://web.stanford.edu/class/cs142/index.html
 
 ## 实验内容
 
