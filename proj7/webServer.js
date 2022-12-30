@@ -49,7 +49,7 @@ var SchemaInfo = require('./schema/schemaInfo.js');
 // XXX - Your submission should work without this line. Comment out or delete this line for tests and before submission!
 //var cs142models = require('./modelData/photoApp.js').cs142models;
 
-mongoose.connect('mongodb://localhost/cs142project6', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect('mongodb://127.0.0.1:27017/cs142project6', { useNewUrlParser: true, useUnifiedTopology: true });
 
 
 // We have the express static module (http://expressjs.com/en/starter/static-files.html) do all

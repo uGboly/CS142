@@ -66,7 +66,7 @@ class PhotoShare extends React.Component {
               {
                 this.state.loggedUser ? (
                 <Route path="/users/:userId"
-                  render={ props => <UserDetail {...props} changeContext={this.changeContext} /> }
+                  render={ props => <UserDetail {...props} key={props.match.params.userId} changeContext={this.changeContext} /> }
                 />
                 ) :
                 <Redirect path="/users/:userId" to="/login-register" />
