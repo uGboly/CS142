@@ -1,43 +1,44 @@
 # CS142: Web Applications (Spring 2022)
 
-## 课程官网
+[中文版](./README_CN.md)
+
+## Course Website
 
 http://web.stanford.edu/class/cs142/index.html
 
-## 实验内容
+## Lab Projects
 
-### Project #1: HTML and CSS
+### Project 1: HTML and CSS
 
-基础html与css实验  
+Basic HTML and CSS lab exercises  
 
-### Project #2: JavaScript Calisthenics
+### Project 2: JavaScript Calisthenics
 
-基础 JS实验，涉及new Function语法的使用与装饰器模式处理函数  
+Basic JavaScript lab exercises, covering the use of `new Function` syntax and the decorator pattern for function handling  
 
-### Project #3: JavaScript and the DOM
+### Project 3: JavaScript and the DOM
 
-1. 用DOM操作与Date类实现一个智能的日历组件  
-2. 在Project2的基础上用DOM操作处理表格  
+1. Use DOM manipulation and the Date class to create an intelligent calendar component  
+2. Extend Project 2 by handling tables with DOM manipulation  
 
-### Project #4: Page Generation with ReactJS
+### Project 4: Page Generation with ReactJS
 
-1. 练习使用state动态更新页面内容
-2. 编写组件并用props建立组件间的通信
-3. 使用react-router实现客户端路由与单页应用
+1. Practice using `state` to dynamically update page content  
+2. Write components and use `props` to establish communication between components  
+3. Use `react-router` to implement client-side routing and single-page applications  
 
 ### Project 5: Single Page Applications
 
-1. 初步搭建照片分享应用，实现用户列表、用户详情与用户照片组件
-2. 使用底层的AJAX接口XMLHttpRequest实现前后端间的通信。其中后端使用expressjs构建服务器
+1. Begin building a photo-sharing application, implementing components for user lists, user details, and user photos  
+2. Use the low-level AJAX interface `XMLHttpRequest` to manage communication between the front-end and back-end, with the back-end built using Express.js  
 
 ### Project 6: Appserver and Database
 
-1. 使用Mongodb储存、查询数据
-2. 使用axios替换Project 5中的XMLHttpRequest并初步实现REST API
+1. Use MongoDB to store and query data  
+2. Replace `XMLHttpRequest` from Project 5 with `axios` and begin implementing a REST API  
 
 ### Project 7: Sessions and Input
 
-1. 为照片分享应用添加登录与注册的功能，使用express-session管理登录状态
-2. 增加照片评论功能
-3. 增加照片上传功能，用multer解析携带文件的post请求
-
+1. Add login and registration functionality to the photo-sharing application, using `express-session` to manage login states  
+2. Add a photo comment feature  
+3. Add a photo upload feature, using `multer` to parse POST requests that carry files
